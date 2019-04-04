@@ -1,6 +1,6 @@
 {
-    "name": "emizentech/categorywidget",
-    "description": "Emizentech Category List Widget",
+    "name": "magemontreal/categorywidget",
+    "description": "MageMontreal Category List Widget",
     "require": {
         "php": "~5.5.0|~5.6.0|~7.0.0"
     },

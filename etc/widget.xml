@@ -2,20 +2,27 @@
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
 	<widget id="magemontreal_categorywidget" class="MageMontreal\CategoryWidget\Block\Widget\CategoryWidget">
-		<label translate="true">Category List Widget</label>
+		<label translate="true">Category List Widget by MageMontreal</label>
 		<description>Store Default 1st level Category List Widget</description>
 		<parameters>
-			<parameter name="image" xsi:type="select" required="true" visible="true">
-                	<label translate="true">Image Type</label>
+			<parameter name="display" xsi:type="select" required="true" visible="true">
+				<label translate="true">Display Type</label>
                 <options>
-                    <option name="default" value="no-image" selected="true">
-                        <label translate="true">No Image</label>
+                    <option name="default" value="image-name" selected="true">
+                        <label translate="true">Image and Name</label>
                     </option>
                     <option name="image" value="image">
-                        <label translate="true">With Image</label>
+                        <label translate="true">Image Only</label>
                     </option>
+					<option name="name" value="name">
+						<label translate="true">Name Only</label>
+					</option>
                 </options>
             </parameter>
+			<parameter name="menu_only" xsi:type="select" visible="true"
+					   source_model="Magento\Config\Model\Config\Source\Yesno">
+				<label translate="true">Only Display Categories Included in Menu</label>
+			</parameter>
 			<parameter name="imagewidth" xsi:type="text"  visible="true" sort_order="2">
 				<label translate="true">Image Width</label>
 				<description translate="true">Enter Image width Ex. 250 , do not suffix with px</description>

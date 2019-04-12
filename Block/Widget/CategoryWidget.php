@@ -42,8 +42,24 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
         }
 
         $category->load($rootCatID);
-        $childCategories = $category->getChildrenCategories()->addAttributeToSelect('image');
+        $childCategories = $category
+            ->getChildrenCategories()
+            ->addAttributeToFilter('is_active', 1)
+            ->addAttributeToSelect('image');
+
+        if($this->getMenuOnly()) {
+            $childCategories->addAttributeToFilter('include_in_menu', 1);
+        }
+
         return $childCategories;
+    }
+
+    private function getMenuOnly()
+    {
+        if (empty($this->getData('menu_only'))) {
+            return true;
+        }
+        return $this->getData('menu_only') === '1';
     }
 
     /**

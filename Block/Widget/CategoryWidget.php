@@ -14,6 +14,11 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
     protected $_categoryFactory;
 
     /**
+     * \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
+     */
+    protected $_categoryCollectionFactory;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
@@ -21,9 +26,11 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
     public function __construct(
     \Magento\Framework\View\Element\Template\Context $context,
     \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+    \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
     array $data = []
     ) {
         $this->_categoryFactory = $categoryFactory;
+        $this->_categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $data);
     }
 
@@ -36,17 +43,25 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
     {
         $category = $this->_categoryFactory->create();
 
-        if ($this->getData('parentcat') > 0) {
-            $rootCatID = $this->getData('parentcat');
-        } else {
-            $rootCatID = $this->_storeManager->getStore()->getRootCategoryId();
+        if ($this->getData('childrencat')) {
+            $categoryIds = array_map('trim',explode(',', $this->getData('childrencat')));
+            $childCategories = $this->_categoryCollectionFactory->create();
+            $childCategories->addAttributeToFilter('entity_id', ['in' => $categoryIds]);
+        }
+        else {
+            if ($this->getData('parentcat') > 0) {
+                $rootCatID = $this->getData('parentcat');
+            } else {
+                $rootCatID = $this->_storeManager->getStore()->getRootCategoryId();
+            }
+            $category->load($rootCatID);
+            $childCategories = $category->getChildrenCategories();
         }
 
-        $category->load($rootCatID);
-        $childCategories = $category
-            ->getChildrenCategories()
+        $childCategories
             ->addAttributeToFilter('is_active', 1)
-            ->addAttributeToSelect('image');
+            ->addAttributeToSelect(['name', 'image'])
+            ->setOrder('position','ASC');
 
         if($this->getMenuOnly()) {
             $childCategories->addAttributeToFilter('include_in_menu', 1);

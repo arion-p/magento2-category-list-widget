@@ -7,6 +7,7 @@
 <li>Category Image into List</li>
 <li>Can Manage Image Size</li>
 <li>Can Assign Custom Parent Category</li>
+<li>Can list any category</li>
 </ul>
 
 <h2>Composer Installation Instructions</h2>

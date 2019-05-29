@@ -37,6 +37,10 @@
 				<label translate="true">Specific Parent Category ID</label>
 				<description translate="true">Default Category of Current Store will be used in case of Blank</description>
 			</parameter>
+			<parameter name="childrencat" xsi:type="text"  visible="true" sort_order="15">
+				<label translate="true">Specific Category IDs</label>
+				<description translate="true">If specified, ignores Parent Category ID and list only these specific categories</description>
+			</parameter>
 		</parameters>
 	</widget>
 </widgets>

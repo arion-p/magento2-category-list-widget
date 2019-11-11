@@ -1,7 +1,9 @@
 <?php
-$categories = $this->getCategoryCollection();
-$canShowImg = $this->canShowImage();
-$canShowName = $this->canShowName();
+/** @var MageMontreal\CategoryWidget\Block\Widget\CategoryWidget $block */
+
+$categories = $block->getCategoryCollection();
+$canShowImg = $block->canShowImage();
+$canShowName = $block->canShowName();
 ?>
 
 <div class="block-content catalog-category">

@@ -35,7 +35,7 @@
 			</parameter>
 			<parameter name="parentcat" xsi:type="text"  visible="true" sort_order="10">
 				<label translate="true">Specific Parent Category ID</label>
-				<description translate="true">Default Category of Current Store will be used in case of Blank</description>
+				<description translate="true">Current Category or Default Category of Current Store will be used in case of Blank</description>
 			</parameter>
 			<parameter name="childrencat" xsi:type="text"  visible="true" sort_order="15">
 				<label translate="true">Specific Category IDs</label>

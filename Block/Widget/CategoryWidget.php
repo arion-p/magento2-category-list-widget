@@ -4,10 +4,30 @@ use Magento\Framework\Registry;
 
 class CategoryWidget extends \Magento\Framework\View\Element\Template implements \Magento\Widget\Block\BlockInterface
 {
-    protected $_template = 'widget/categorywidget.phtml';
+    const TEMPLATES = [
+        'default' => 'widget/categorywidget.phtml',
+        'alphabet-list' => 'widget/alphabet_list.phtml',
+        'alphabet-group' => 'widget/alphabet_group.phtml',
+        'menu' => 'widget/menu.phtml',
+    ];
+
+    protected $_template = self::TEMPLATES['default'];
 
     const DEFAULT_IMAGE_WIDTH = 250;
     const DEFAULT_IMAGE_HEIGHT = 250;
+
+    const ALPHABET_GROUPS = [
+        '#' => ['#'],
+        'A-C' => ['A', 'B', 'C'],
+        'D-G' => ['D', 'E', 'F', 'G'],
+        'H-K' => ['H', 'I', 'J', 'K'],
+        'L-O' => ['L', 'M', 'N', 'O'],
+        'P-S' => ['P', 'Q', 'R', 'S'],
+        'T-W' => ['T', 'U', 'W', 'W'],
+        'X-Z' => ['X', 'Y', 'Z'],
+    ];
+
+    const ORDER_BY = ['name', 'position','id'];
 
     /**
      * Registry
@@ -31,16 +51,25 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
      * @param array $data
      */
     public function __construct(
-    \Magento\Framework\View\Element\Template\Context $context,
-    Registry $registry,
-    \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-    \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-    array $data = []
+        \Magento\Framework\View\Element\Template\Context $context,
+        Registry $registry,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        array $data = []
     ) {
         $this->_registry = $registry;
         $this->_categoryFactory = $categoryFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         parent::__construct($context, $data);
+    }
+
+    public function getTemplate()
+    {
+        if (!$this->hasData('template')) {
+            $this->setData('template', self::TEMPLATES[$this->getType()]);
+        }
+
+        return $this->getData('template');
     }
 
     /**
@@ -93,25 +122,65 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
     /**
      * Retrieve current store categories
      *
-     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection|array
+     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\Resource\Category\Collection
      */
     public function getCategoryCollection()
     {
-        $categoryIds = $this->getSubCategoryIds();
+        if (!$this->hasData('category_collection')) {
+            $categoryIds = $this->getSubCategoryIds();
 
-        $childCategories = $this->_categoryCollectionFactory->create();
+            $childCategories = $this->_categoryCollectionFactory->create();
 
-        $childCategories
-            ->addAttributeToFilter('entity_id', ['in' => $categoryIds])
-            ->addAttributeToFilter('is_active', 1)
-            ->addAttributeToSelect(['name', 'image'])
-            ->setOrder('position', 'ASC');
+            $childCategories
+                ->addAttributeToFilter('entity_id', ['in' => $categoryIds])
+                ->addAttributeToFilter('is_active', 1)
+                ->addAttributeToSelect(['name', 'image'])
+                ->setOrder($this->getOrderBy(), 'ASC');
 
-        if($this->getMenuOnly()) {
-            $childCategories->addAttributeToFilter('include_in_menu', 1);
+            if($this->getMenuOnly()) {
+                $childCategories->addAttributeToFilter('include_in_menu', 1);
+            }
+
+            $this->setData('category_collection', $childCategories);
         }
 
-        return $childCategories;
+        return $this->getData('category_collection');
+    }
+
+    public function getAlphabetList() {
+        $collection = $this->getCategoryCollection();
+
+        $ordered_categories = [];
+
+        foreach ($collection as $category) {
+            $letter = strtoupper(iconv('UTF-8','ASCII//TRANSLIT',$category->getName()[0]));
+            if (!ctype_alpha($letter)) {
+                $letter = '#';
+            }
+
+            $ordered_categories[$letter][] = $category;
+            ksort($ordered_categories[$letter]);
+        }
+        ksort($ordered_categories);
+
+        return $ordered_categories;
+    }
+
+    public function getAlphabetGrouped() {
+
+        $list = $this->getAlphabetList();
+
+        $grouped_categories = [];
+
+        foreach (self::ALPHABET_GROUPS as $group_name => $group) {
+            foreach ($group as $letter) {
+                if (isset($list[$letter])) {
+                    $grouped_categories[$group_name][$letter] = $list[$letter];
+                }
+            }
+        }
+
+        return $grouped_categories;
     }
 
     private function getMenuOnly()
@@ -122,37 +191,31 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
         return $this->getData('menu_only') === '1';
     }
 
-    /**
-     * Get the width of product image
-     * @return int
-     */
-    public function getImageWidth()
+    public function getOrderBy()
     {
-        if (empty($this->getData('imagewidth'))) {
-            return self::DEFAULT_IMAGE_WIDTH;
+        if(!$this->hasData('order_by') || !in_array($this->getData('order_by'), self::ORDER_BY)) {
+            $this->setData('order_by', 'name');
         }
-        return (int) $this->getData('imagewidth');
+
+        return $this->getData('order_by');
     }
 
-    /**
-     * Get the height of product image
-     * @return int
-     */
-    public function getImageHeight()
-    {
-        if (empty($this->getData('imageheight'))) {
-            return self::DEFAULT_IMAGE_HEIGHT;
+    public function getType() {
+        if(!$this->hasData('type') || !isset(self::TEMPLATES[$this->getData('type')])) {
+            $type = 'default';
+            $this->setData('type', $type);
         }
-        return (int) $this->getData('imageheight');
+
+        return $this->getData('type');
     }
 
     public function canShowImage()
     {
-        return in_array($this->getData('display'), ['image', 'image-name']);
+        return $this->getData('show_image') === '1' || in_array($this->getData('display'), ['image', 'image-name']);
     }
 
     public function canShowName()
     {
-        return in_array($this->getData('display'), ['name', 'image-name']);
+        return $this->getData('show_name') === '1' || in_array($this->getData('display'), ['name', 'image-name']);
     }
 }

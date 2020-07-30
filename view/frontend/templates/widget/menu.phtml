@@ -1,0 +1,25 @@
+<?php
+/** @var MageMontreal\CategoryWidget\Block\Widget\CategoryWidget $block */
+
+$grouped_categories = $block->getAlphabetGrouped();
+?>
+
+<nav class="navigation mm-category-widget mm-category-widget-<?= $block->getType() ?>" data-action="navigation">
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+        <?php foreach ($grouped_categories as $group_name => $group):?>
+            <li class="level0 parent ui-menu-item">
+                <a class="level-top" href="#"><?= $block->escapeHtml($group_name) ?></a>
+                <ul class="level0 submenu ui-menu ui-widget ui-widget-content ui-corner-all">
+                    <?php foreach ($group as $letter => $categories): ?>
+                        <?php foreach ($categories as $category): ?>
+                            <li class="level1 ui-menu-item">
+                                <a href="<?= $block->escapeUrl($category->getUrl()) ?>" class="ui-corner-all catnav"><?= $block->escapeHtml($category->getName()) ?></a>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </ul>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</nav>
+

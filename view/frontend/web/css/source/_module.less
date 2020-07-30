@@ -1,0 +1,27 @@
+& when (@media-common = true) {
+    .mm-category-widget {
+        & {
+            .list-content {
+                display: flex;
+                flex-wrap: wrap;
+
+                .group-content {
+                    flex: 1 0 21%;
+                }
+            }
+
+        }
+        &-alphabet-list .list-content .group-content .categories-content {
+            padding-left: 20px;
+        }
+
+        &-default {
+            .catimg {
+                border: 1px solid #ccc;
+            }
+            .list-content .group-content {
+                margin: 10px;
+            }
+        }
+    }
+}

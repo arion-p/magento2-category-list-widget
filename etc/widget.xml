@@ -1,43 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?> 
-<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
 	<widget id="magemontreal_categorywidget" class="MageMontreal\CategoryWidget\Block\Widget\CategoryWidget">
 		<label translate="true">Category List Widget by MageMontreal</label>
 		<description>Store Default 1st level Category List Widget</description>
 		<parameters>
-			<parameter name="display" xsi:type="select" required="true" visible="true">
+			<parameter name="type" xsi:type="select" required="true" visible="true" sort_order="10">
 				<label translate="true">Display Type</label>
-                <options>
-                    <option name="default" value="image-name" selected="true">
-                        <label translate="true">Image and Name</label>
-                    </option>
-                    <option name="image" value="image">
-                        <label translate="true">Image Only</label>
-                    </option>
-					<option name="name" value="name">
-						<label translate="true">Name Only</label>
+				<options>
+					<option name="default" value="default" selected="true">
+						<label translate="true">List</label>
 					</option>
-                </options>
-            </parameter>
-			<parameter name="menu_only" xsi:type="select" visible="true"
-					   source_model="Magento\Config\Model\Config\Source\Yesno">
-				<label translate="true">Only Display Categories Included in Menu</label>
+					<option name="alphabet-list" value="alphabet-list">
+						<label translate="true">Alphabet (List)</label>
+					</option>
+					<option name="alphabet-group" value="alphabet-group">
+						<label translate="true">Alphabet (Grouped)</label>
+					</option>
+					<option name="menu" value="menu">
+						<label translate="true">Menu</label>
+					</option>
+				</options>
 			</parameter>
-			<parameter name="imagewidth" xsi:type="text"  visible="true" sort_order="2">
-				<label translate="true">Image Width</label>
-				<description translate="true">Enter Image width Ex. 250 , do not suffix with px</description>
-                		<value>250</value>
+			<parameter name="show_name" xsi:type="select" visible="true" sort_order="20">
+				<label translate="true">Show Name</label>
+				<depends>
+					<parameter name="type" value="default"/>
+				</depends>
+				<options>
+					<option name="yes" value="1" selected="true">
+						<label translate="true">Yes</label>
+					</option>
+					<option name="no" value="0">
+						<label translate="true">No</label>
+					</option>
+				</options>
 			</parameter>
-			<parameter name="imageheight" xsi:type="text"  visible="true" sort_order="3">
-				<label translate="true">Image Height</label>
-				<description translate="true">Enter Image Height Ex. 250 , do not suffix with px</description>
-                		<value>250</value>
+			<parameter name="show_image" xsi:type="select" visible="true" sort_order="25">
+				<label translate="true">Show Image</label>
+				<depends>
+					<parameter name="type" value="default"/>
+				</depends>
+				<options>
+					<option name="yes" value="1" selected="true">
+						<label translate="true">Yes</label>
+					</option>
+					<option name="no" value="0">
+						<label translate="true">No</label>
+					</option>
+				</options>
 			</parameter>
-			<parameter name="parentcat" xsi:type="text"  visible="true" sort_order="10">
+			<parameter name="order_by" xsi:type="select" required="true" visible="true" sort_order="50">
+				<label translate="true">Order By</label>
+				<depends>
+					<parameter name="type" value="default"/>
+				</depends>
+				<options>
+					<option name="name" value="name" selected="true">
+						<label translate="true">Name</label>
+					</option>
+					<option name="position" value="position">
+						<label translate="true">Position</label>
+					</option>
+				</options>
+			</parameter>
+			<parameter name="menu_only" xsi:type="select" visible="true" source_model="Magento\Config\Model\Config\Source\Yesno" sort_order="60">
+				<label translate="true">Only Display Categories set as "Include in Menu"</label>
+			</parameter>
+			<parameter name="parentcat" xsi:type="text"  visible="true" sort_order="60">
 				<label translate="true">Specific Parent Category ID</label>
 				<description translate="true">Current Category or Default Category of Current Store will be used in case of Blank</description>
 			</parameter>
-			<parameter name="childrencat" xsi:type="text"  visible="true" sort_order="15">
+			<parameter name="childrencat" xsi:type="text"  visible="true" sort_order="70">
 				<label translate="true">Specific Category IDs</label>
 				<description translate="true">If specified, ignores Parent Category ID and list only these specific categories</description>
 			</parameter>

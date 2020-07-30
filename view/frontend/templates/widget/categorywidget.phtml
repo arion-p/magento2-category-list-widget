@@ -6,23 +6,25 @@ $canShowImg = $block->canShowImage();
 $canShowName = $block->canShowName();
 ?>
 
-<div class="block-content catalog-category">
-    <?php foreach ($categories as $category): ?>
-        <div class="category">
-            <?php if ($canShowImg && $category->getImageUrl()): ?>
-                <div class="category-image">
-                    <a href="<?php echo $block->escapeUrl($category->getUrl()) ?>">
-                        <img src="<?php echo $block->escapeUrl($category->getImageUrl()) ?>" alt="<?php echo $block->escapeHtml($category->getName()) ?>" width="<?= $this->getImageWidth() ?>" height="<?= $this->getImageHeight() ?>"/>
-                    </a>
-                </div>
-            <?php endif;?>
-            <?php if ($canShowName): ?>
-                <div class="category-name">
-                    <a href="<?php echo $block->escapeUrl($category->getUrl()) ?>">
-                        <?php echo $block->escapeHtml($category->getName()) ?>
-                    </a>
-                </div>
-            <?php endif;?>
-        </div>
-    <?php endforeach; ?>
+<div class="mm-category-widget mm-category-widget-<?= $block->getType() ?>">
+    <div class="list-content">
+        <?php foreach ($categories as $category): ?>
+            <div class="group-content">
+                <?php if ($canShowImg && $category->getImageUrl()): ?>
+                    <div class="catimg">
+                        <a href="<?php echo $block->escapeUrl($category->getUrl()) ?>">
+                            <img src="<?php echo $block->escapeUrl($category->getImageUrl()) ?>" alt="<?php echo $block->escapeHtml($category->getName()) ?>" />
+                        </a>
+                    </div>
+                <?php endif;?>
+                <?php if ($canShowName): ?>
+                    <div class="catname">
+                        <a class="catnav" href="<?php echo $block->escapeUrl($category->getUrl()) ?>">
+                            <?php echo $block->escapeHtml($category->getName()) ?>
+                        </a>
+                    </div>
+                <?php endif;?>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </div>

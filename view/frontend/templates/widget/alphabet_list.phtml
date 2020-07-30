@@ -1,0 +1,24 @@
+<?php
+/** @var MageMontreal\CategoryWidget\Block\Widget\CategoryWidget $block */
+
+$ordered_categories = $block->getAlphabetList();
+?>
+
+<div class="mm-category-widget mm-category-widget-<?= $block->getType() ?>">
+    <div class="list-content">
+        <?php foreach ($ordered_categories as $letter => $categories): ?>
+            <div class="group-content">
+                <h3 class="top-letter"><?= $letter ?></h3>
+                <div class="categories-content">
+                    <?php foreach ($categories as $category): ?>
+                        <div>
+                            <a class="catnav" href="<?= $block->escapeUrl($category->getUrl()) ?>">
+                                <?= $block->escapeHtml($category->getName()) ?>
+                            </a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endforeach ?>
+    </div>
+</div>

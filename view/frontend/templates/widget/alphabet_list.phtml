@@ -4,7 +4,7 @@
 $ordered_categories = $block->getAlphabetList();
 ?>
 
-<div class="mm-category-widget mm-category-widget-<?= $block->getType() ?>">
+<div class="mm-category-widget mm-category-widget-<?= $block->getDisplayType() ?>">
     <div class="list-content">
         <?php foreach ($ordered_categories as $letter => $categories): ?>
             <div class="group-content">

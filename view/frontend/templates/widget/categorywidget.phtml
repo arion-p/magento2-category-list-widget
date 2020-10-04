@@ -4,23 +4,25 @@
 $categories = $block->getCategoryCollection();
 $canShowImg = $block->canShowImage();
 $canShowName = $block->canShowName();
+$imageType = $block->getImageType();
 ?>
 
-<div class="mm-category-widget mm-category-widget-<?= $block->getType() ?>">
+<div class="mm-category-widget mm-category-widget-<?= $block->getDisplayType() ?>">
     <div class="list-content">
+        <?php /** @var \Magento\Catalog\Model\Category $category */?>
         <?php foreach ($categories as $category): ?>
             <div class="group-content">
-                <?php if ($canShowImg && $category->getImageUrl()): ?>
+                <?php if ($canShowImg && $category->getImageUrl($imageType)): ?>
                     <div class="catimg">
-                        <a href="<?php echo $block->escapeUrl($category->getUrl()) ?>">
-                            <img src="<?php echo $block->escapeUrl($category->getImageUrl()) ?>" alt="<?php echo $block->escapeHtml($category->getName()) ?>" />
+                        <a href="<?= $block->escapeUrl($category->getUrl()) ?>">
+                            <img src="<?=$block->escapeUrl($category->getImageUrl($imageType)) ?>" alt="<?= $block->escapeHtml($category->getName()) ?>" />
                         </a>
                     </div>
                 <?php endif;?>
                 <?php if ($canShowName): ?>
                     <div class="catname">
-                        <a class="catnav" href="<?php echo $block->escapeUrl($category->getUrl()) ?>">
-                            <?php echo $block->escapeHtml($category->getName()) ?>
+                        <a class="catnav" href="<?= $block->escapeUrl($category->getUrl()) ?>">
+                            <?= $block->escapeHtml($category->getName()) ?>
                         </a>
                     </div>
                 <?php endif;?>

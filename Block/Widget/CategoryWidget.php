@@ -23,7 +23,7 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
         'H-K' => ['H', 'I', 'J', 'K'],
         'L-O' => ['L', 'M', 'N', 'O'],
         'P-S' => ['P', 'Q', 'R', 'S'],
-        'T-W' => ['T', 'U', 'W', 'W'],
+        'T-W' => ['T', 'U', 'V', 'W'],
         'X-Z' => ['X', 'Y', 'Z'],
     ];
 
@@ -66,7 +66,7 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
     public function getTemplate()
     {
         if (!$this->hasData('template')) {
-            $this->setData('template', self::TEMPLATES[$this->getType()]);
+            $this->setData('template', self::TEMPLATES[$this->getDisplayType()]);
         }
 
         return $this->getData('template');
@@ -105,12 +105,11 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
             }
             else {
                 $parentCategory = $this->getParentCategory();
-                $categoryIds = $parentCategory->getAllChildren(true);
-            }
-
-            // Remove parent category
-            if (($parentCategoryKey = array_search($parentCategory->getId(), $categoryIds)) !== false) {
-                unset($categoryIds[$parentCategoryKey]);
+                $categoryIds = explode(',',  $parentCategory->getChildren());
+                // Remove parent category
+                if (($parentCategoryKey = array_search($parentCategory->getId(), $categoryIds)) !== false) {
+                    unset($categoryIds[$parentCategoryKey]);
+                }
             }
 
             $this->setData('sub_category_ids', $categoryIds);
@@ -134,7 +133,7 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
             $childCategories
                 ->addAttributeToFilter('entity_id', ['in' => $categoryIds])
                 ->addAttributeToFilter('is_active', 1)
-                ->addAttributeToSelect(['name', 'image'])
+                ->addAttributeToSelect(['name', 'image','mm_cat_icon'])
                 ->setOrder($this->getOrderBy(), 'ASC');
 
             if($this->getMenuOnly()) {
@@ -200,13 +199,13 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
         return $this->getData('order_by');
     }
 
-    public function getType() {
-        if(!$this->hasData('type') || !isset(self::TEMPLATES[$this->getData('type')])) {
+    public function getDisplayType() {
+        if(!$this->hasData('display_type') || !isset(self::TEMPLATES[$this->getData('display_type')])) {
             $type = 'default';
-            $this->setData('type', $type);
+            $this->setData('display_type', $type);
         }
 
-        return $this->getData('type');
+        return $this->getData('display_type');
     }
 
     public function canShowImage()
@@ -218,4 +217,10 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
     {
         return $this->getData('show_name') === '1' || in_array($this->getData('display'), ['name', 'image-name']);
     }
+
+    public function getImageType()
+    {
+        return $this->hasData('image_type') && in_array($this->getData('image_type'), ['image', 'mm_cat_icon']) ? $this->getData('image_type') : 'image';
+    }
+
 }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
 	<widget id="magemontreal_categorywidget" class="MageMontreal\CategoryWidget\Block\Widget\CategoryWidget">
-		<label translate="true">Category List Widget by MageMontreal</label>
+		<label translate="true">MageMontreal - Category List</label>
 		<description>Store Default 1st level Category List Widget</description>
 		<parameters>
-			<parameter name="type" xsi:type="select" required="true" visible="true" sort_order="10">
+			<parameter name="display_type" xsi:type="select" required="true" visible="true" sort_order="10">
 				<label translate="true">Display Type</label>
 				<options>
 					<option name="default" value="default" selected="true">
@@ -24,7 +24,7 @@
 			<parameter name="show_name" xsi:type="select" visible="true" sort_order="20">
 				<label translate="true">Show Name</label>
 				<depends>
-					<parameter name="type" value="default"/>
+					<parameter name="display_type" value="default"/>
 				</depends>
 				<options>
 					<option name="yes" value="1" selected="true">
@@ -38,7 +38,7 @@
 			<parameter name="show_image" xsi:type="select" visible="true" sort_order="25">
 				<label translate="true">Show Image</label>
 				<depends>
-					<parameter name="type" value="default"/>
+					<parameter name="display_type" value="default"/>
 				</depends>
 				<options>
 					<option name="yes" value="1" selected="true">
@@ -49,10 +49,24 @@
 					</option>
 				</options>
 			</parameter>
+			<parameter name="image_type" xsi:type="select" required="true" visible="true" sort_order="30">
+				<label translate="true">Image Type</label>
+				<depends>
+					<parameter name="show_image" value="1"/>
+				</depends>
+				<options>
+					<option name="mm_cat_icon" value="mm_cat_icon" selected="true">
+						<label translate="true">Category Icon</label>
+					</option>
+					<option name="image" value="image">
+						<label translate="true">Category Image</label>
+					</option>
+				</options>
+			</parameter>
 			<parameter name="order_by" xsi:type="select" required="true" visible="true" sort_order="50">
 				<label translate="true">Order By</label>
 				<depends>
-					<parameter name="type" value="default"/>
+					<parameter name="display_type" value="default"/>
 				</depends>
 				<options>
 					<option name="name" value="name" selected="true">

@@ -4,7 +4,7 @@
 $grouped_categories = $block->getAlphabetGrouped();
 ?>
 
-<div class="mm-category-widget mm-category-widget-<?= $block->getType() ?>">
+<div class="mm-category-widget mm-category-widget-<?= $block->getDisplayType() ?>">
     <div class="product data items"
          data-mage-init='{"mage/tabs": {"openedState": "active", "collapsibleElement":".-title", "content":".-content","trigger":".-trigger", "animate": {"duration": 100}, "disabledState": "disabled"}}'>
         <?php $i=0; foreach ($grouped_categories as $group_name => $group): $i++ ?>

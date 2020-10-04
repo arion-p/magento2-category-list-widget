@@ -13,6 +13,6 @@ class AddImage implements ObserverInterface
     public function execute(Observer $observer)
     {
         $select = $observer->getSelect();
-        return $select->columns('image');
+        return $select->columns('image')->columns('mm_cat_icon');
     }
 }

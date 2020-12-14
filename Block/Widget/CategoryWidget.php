@@ -152,7 +152,7 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
         $ordered_categories = [];
 
         foreach ($collection as $category) {
-            $letter = strtoupper(iconv('UTF-8','ASCII//TRANSLIT',$category->getName()[0]));
+            $letter = strtoupper(substr(transliterator_transliterate('Any-Latin; Latin-ASCII;', $category->getName()), 0, 1));
             if (!ctype_alpha($letter)) {
                 $letter = '#';
             }

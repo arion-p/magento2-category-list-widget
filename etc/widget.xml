@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
 	<widget id="magemontreal_categorywidget" class="MageMontreal\CategoryWidget\Block\Widget\CategoryWidget">
 		<label translate="true">MageMontreal - Category List</label>
@@ -18,6 +18,17 @@
 					</option>
 					<option name="menu" value="menu">
 						<label translate="true">Menu</label>
+					</option>
+				</options>
+			</parameter>
+			<parameter name="siblings" xsi:type="select" visible="true" sort_order="15">
+				<label translate="true">Display category siblings if no children</label>
+				<options>
+					<option name="no" value="0" selected="true">
+						<label translate="true">No</label>
+					</option>
+					<option name="yes" value="1">
+						<label translate="true">Yes</label>
 					</option>
 				</options>
 			</parameter>

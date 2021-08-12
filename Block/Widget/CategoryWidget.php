@@ -100,17 +100,31 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
 
     private function getSubCategoryIds() {
         if (!$this->hasData('sub_category_ids')) {
-            if ($children = $this->getCurrentCategory()->getChildren()) {
-                $categoryIds = explode(',',  $children);
+            if ($this->getData('childrencat')) {
+                $categoryIds = array_map('trim',explode(',', $this->getData('childrencat')));
             }
             else {
-                $parentCategory = $this->getCurrentCategory()->getParentCategory();
+                $parentCategory = $this->getParentCategory();
                 $categoryIds = explode(',',  $parentCategory->getChildren());
+
                 // Remove parent category
                 if (($parentCategoryKey = array_search($parentCategory->getId(), $categoryIds)) !== false) {
                     unset($categoryIds[$parentCategoryKey]);
                 }
+
+                // No children, get parent of parent
+                if (empty($categoryIds) || $categoryIds[0]=='' && $this->getData('siblings')) {
+                    $parentCategory = $parentCategory->getParentCategory();
+                    $categoryIds = explode(',',  $parentCategory->getChildren());
+                    // Remove parent category
+                    if (($parentCategoryKey = array_search($parentCategory->getId(), $categoryIds)) !== false) {
+                        unset($categoryIds[$parentCategoryKey]);
+                    }
+                }
             }
+
+
+
 
             $this->setData('sub_category_ids', $categoryIds);
         }

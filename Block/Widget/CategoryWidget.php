@@ -198,10 +198,7 @@ class CategoryWidget extends \Magento\Framework\View\Element\Template implements
 
     private function getMenuOnly()
     {
-        if (empty($this->getData('menu_only'))) {
-            return true;
-        }
-        return $this->getData('menu_only') === '1';
+        return !$this->hasData('menu_only') || $this->getData('menu_only') === '1';
     }
 
     public function getOrderBy()
